@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -36,13 +37,14 @@ public class PreviewService
         g.DrawRectangle(Pens.Black, x, y, Width - x*2, Height - y * 2); //frame
 
         //Title
-        y += DrawTextCenter(y, "Potvrzení o provedení měření", 16);
+        y += DrawH1(x, y, "Potvrzení o provedení měření", 16);
         
         //Info
-        y += DrawEndStart(y, $"Datum měření: {Sp.MeaDate.ToString("d")}", 
-                             $"Číslo protokolu: {Sp.Number}");
+        y += DrawEndStart(x, y, $"Datum měření: {Sp.MeaDate.ToString("d")}", 
+                                $"Číslo protokolu: {Sp.Number}");
         //Boxes
-        y += DrawBoxData(x,y, 
+        int aa = 0;
+        aa = DrawBoxData(x,y, 
             "Zákazník", 
             $"Název: {Sp.Customer.Name}",
             $"Adresa: {Sp.Customer.Address}",
@@ -55,9 +57,10 @@ public class PreviewService
             $"Model: {Sp.Device.Model}",
             $"Sériové číslo: {Sp.Device.SerialNumber}"
         );
+        y += aa;
 
         //Mea
-        y += DrawHeader(x, y, "Měření");
+        y += DrawH2(x, y, "Měření");
         y += DrawItem(x, y, "Parametr", "Naměřená hodnota", "Vyhovuje", true);
         foreach (var mea in Sp.Measurements)
         {
@@ -67,49 +70,7 @@ public class PreviewService
 
         //Result
         string valid = (Sp.IsValid()) ? "je" : "není";
-        y += DrawTextCenter(y, $"Zařízení {valid} schopné dalšího provozu", 15);
-    }
-
-    private int DrawItem(int x, int y, string start, string mid, string end, bool bold = false)
-    {
-        Font f;
-        if (bold) { f = new Font("Arial", 12, FontStyle.Bold);  }
-        else      { f = new Font("Arial", 12); }
-        var b = new SolidBrush(Color.Black);
-
-        SizeF mid_mea = g.MeasureString(mid, f);
-        SizeF end_mea = g.MeasureString(end, f);
-
-        int xCenter = (Width / 2) + (int)mid_mea.Width / 2;
-        int xEnd = (Width) + (int)end_mea.Width / 2;
-
-        g.DrawString(start, f, b, x, y);
-        g.DrawString(mid, f, b, xCenter, y);
-        g.DrawString(end, f, b, xEnd, y);
-
-        return (int)mid_mea.Height;
-    }
-    private int DrawTextCenter(int y, string text, int size = 16)
-    {
-        var f = new Font("Arial", size, FontStyle.Bold);
-        var b = new SolidBrush(Color.Black);
-
-        SizeF mea = g.MeasureString(text, f);
-
-        g.DrawString(text, f, b, Width/2 + (int)mea.Width/2, y);
-
-        return (int)mea.Height;
-    }
-
-    private int DrawEndStart(int y, string text1, string text2, int size = 12)
-    {
-        var f = new Font("Arial", size);
-        var b = new SolidBrush(Color.Black);
-        SizeF mea = g.MeasureString(text1, f);
-
-        g.DrawString(text1, f, b, (int)mea.Width / 2, y);
-
-        return (int)mea.Height;
+        y += DrawH1(x, y, $"Zařízení {valid} schopné dalšího provozu", 15);
     }
 
     private int DrawBoxData(int x, int y, string title, params string[] values)
@@ -121,7 +82,7 @@ public class PreviewService
         X += margin;
         Y += margin;
 
-        Y += DrawHeader(X,Y,title);
+        Y += DrawH2(X,Y,title);
         foreach (var val in values)
             Y += DrawText(X, Y, val);
 
@@ -131,23 +92,48 @@ public class PreviewService
         return Y;
     }
 
-    private int DrawHeader(int x, int y, string text)
+    private int DrawItem(int x, int y, string start, string mid, string end, bool bold = false, int size = 12)
     {
-        int height = DrawText(x, y, text, 14, true);
+        int a = DrawText(x, y, start, size, bold, false);
+        DrawText(Width / 2, y, mid, size, bold, true);
+        DrawText(Width, y, end, size, bold, true);
+        return a;
+    }
 
-        int bottom_margin = 5;
+
+    private int DrawEndStart(int x, int y, string text1, string text2, int size = 12)
+    {
+        int a = DrawText(x, y, text1, size, false, true);
+        int b = DrawText(Width, y, text1, size, false, true);
+
+        return (a > b) ? a : b;
+    }
+
+    private int DrawH1(int x, int y, string text, int size = 16)
+    {
+        return DrawText(Width / 2, y, text, size, true, true);
+    }
+
+    private int DrawH2(int x, int y, string text, int size = 14, int bottom_margin = 5)
+    {
+        int height = DrawText(x, y, text, size, true);
 
         return height + bottom_margin;
     }
-    private int DrawText(int x, int y, string text, int size = 12, bool isBold = false)
+    private int DrawText(int x, int y, string text, int size = 12, bool isBold = false, bool isCentered = false)
     {
-        Font f;
-        if (isBold) { f = new Font("Arial", 12, FontStyle.Bold); }
-        else { f = new Font("Arial", 12); }
+        float X = x;
+
+        var f = new Font("Arial", size, isBold ? FontStyle.Bold : FontStyle.Regular);
         var b = new SolidBrush(Color.Black);
         SizeF mea = g.MeasureString(text, f);
 
-        g.DrawString(text, f, b, x, y);
+        if (isCentered) // 0.5 = /2 | 1 = full | 0 = none
+            X -= mea.Width/2;
+
+        
+
+        g.DrawString(text, f, b, X, y);
 
         return (int)mea.Height;
     }
