@@ -31,17 +31,20 @@ public class PreviewService
         Height = h;
         g = e;
 
-        int x = 10; //padding
-        int y = 10;
+        int x = 20; //padding
+        int y = 20;
 
-        g.DrawRectangle(Pens.Black, x, y, Width - x*2, Height - y * 2); //frame
+        g.DrawRectangle(Pens.Black, x/2, y/2, Width - x, Height - y); //frame
 
         //Title
         y += DrawH1(x, y, "Potvrzení o provedení měření", 16);
+        y += 10;
         
         //Info
         y += DrawEndStart(x, y, $"Datum měření: {Sp.MeaDate.ToString("d")}", 
                                 $"Číslo protokolu: {Sp.Number}");
+        y += 5;
+
         //Boxes
         int aa = 0;
         aa = DrawBoxData(x,y, 
@@ -51,13 +54,13 @@ public class PreviewService
             $"PSČ: {Sp.Customer.Psc}",
             $"IČ: {Sp.Customer.Ic}"
         );
-        DrawBoxData(Width/2, y,
+        DrawBoxData(Width/2 - x+2, y,
             "Zařízení",
             $"Výrobce: {Sp.Device.Manufacturer}",
             $"Model: {Sp.Device.Model}",
             $"Sériové číslo: {Sp.Device.SerialNumber}"
         );
-        y += aa;
+        y += aa + 10;
 
         //Mea
         y += DrawH2(x, y, "Měření");
@@ -67,6 +70,7 @@ public class PreviewService
             y += DrawItem(x, y, mea.Parametr, mea.Value.ToString()+mea.Unit, (mea.IsValid) ? "ANO" : "NE");
             y += 5; //margin
         }
+        y += 20;
 
         //Result
         string valid = (Sp.IsValid()) ? "je" : "není";
@@ -94,24 +98,24 @@ public class PreviewService
 
     private int DrawItem(int x, int y, string start, string mid, string end, bool bold = false, int size = 12)
     {
-        int a = DrawText(x, y, start, size, bold, false);
-        DrawText(Width / 2, y, mid, size, bold, true);
-        DrawText(Width, y, end, size, bold, true);
+        int a = DrawText(x, y, start, size, bold, 0f);
+        DrawText(Width / 2 - x, y, mid, size, bold, 0.5f);
+        DrawText(Width -x , y, end, size, bold, 1f);
         return a;
     }
 
 
     private int DrawEndStart(int x, int y, string text1, string text2, int size = 12)
     {
-        int a = DrawText(x, y, text1, size, false, true);
-        int b = DrawText(Width, y, text1, size, false, true);
+        int a = DrawText(x, y, text1, size, false);
+        int b = DrawText(Width -x, y, text2, size, false, 1f);
 
         return (a > b) ? a : b;
     }
 
     private int DrawH1(int x, int y, string text, int size = 16)
     {
-        return DrawText(Width / 2, y, text, size, true, true);
+        return DrawText(Width / 2-x, y, text, size, true, 0.5f);
     }
 
     private int DrawH2(int x, int y, string text, int size = 14, int bottom_margin = 5)
@@ -120,18 +124,14 @@ public class PreviewService
 
         return height + bottom_margin;
     }
-    private int DrawText(int x, int y, string text, int size = 12, bool isBold = false, bool isCentered = false)
+    private int DrawText(int x, int y, string text, int size = 12, bool isBold = false, float wscale = 0)
     {
         float X = x;
-
         var f = new Font("Arial", size, isBold ? FontStyle.Bold : FontStyle.Regular);
         var b = new SolidBrush(Color.Black);
         SizeF mea = g.MeasureString(text, f);
 
-        if (isCentered) // 0.5 = /2 | 1 = full | 0 = none
-            X -= mea.Width/2;
-
-        
+        X -= mea.Width * wscale; // 0.5 = /2 | 1 = full | 0 = none
 
         g.DrawString(text, f, b, X, y);
 
