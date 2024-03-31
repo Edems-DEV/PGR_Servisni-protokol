@@ -63,6 +63,8 @@
             ClientSize = new Size(677, 693);
             Controls.Add(btn_close);
             Controls.Add(pictureBox1);
+            MaximumSize = new Size(693, 732);
+            MinimumSize = new Size(693, 732);
             Name = "Form2_Preview";
             Text = "Náhled tisku";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();

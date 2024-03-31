@@ -415,6 +415,8 @@
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            MaximumSize = new Size(644, 611);
+            MinimumSize = new Size(644, 611);
             Name = "Form1";
             Text = "Servisní protokol";
             groupBox1.ResumeLayout(false);

@@ -31,7 +31,7 @@ namespace Servisni_protokol
 
         private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.Clear(Color.White);
+            //e.Graphics.Clear(Color.White);
             s.Draw(e.Graphics, pictureBox1.Width, pictureBox1.Height);
         }
     }

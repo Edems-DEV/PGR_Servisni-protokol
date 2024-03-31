@@ -111,6 +111,8 @@
             Controls.Add(label2);
             Controls.Add(tb_Id);
             Controls.Add(label1);
+            MaximumSize = new Size(375, 165);
+            MinimumSize = new Size(375, 165);
             Name = "Form_edit_info";
             Text = "Základní informace";
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();

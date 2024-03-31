@@ -151,6 +151,8 @@
             Controls.Add(label2);
             Controls.Add(tb_Name);
             Controls.Add(label1);
+            MaximumSize = new Size(390, 219);
+            MinimumSize = new Size(390, 219);
             Name = "Form_edit_customer";
             Text = "Zákazník";
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();

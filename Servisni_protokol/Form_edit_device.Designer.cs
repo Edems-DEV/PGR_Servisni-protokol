@@ -132,6 +132,8 @@
             Controls.Add(label2);
             Controls.Add(tb_Manufacturer);
             Controls.Add(label1);
+            MaximumSize = new Size(375, 194);
+            MinimumSize = new Size(375, 194);
             Name = "Form_edit_device";
             Text = "Zařízení";
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();

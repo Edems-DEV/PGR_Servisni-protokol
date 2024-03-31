@@ -155,6 +155,8 @@
             Controls.Add(label2);
             Controls.Add(tb_parametr);
             Controls.Add(label1);
+            MaximumSize = new Size(375, 218);
+            MinimumSize = new Size(375, 218);
             Name = "Form_edit_measurements";
             Text = "Měření";
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
