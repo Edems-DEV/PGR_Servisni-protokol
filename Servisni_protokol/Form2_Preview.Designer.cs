@@ -60,6 +60,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
+            CancelButton = btn_close;
             ClientSize = new Size(677, 693);
             Controls.Add(btn_close);
             Controls.Add(pictureBox1);

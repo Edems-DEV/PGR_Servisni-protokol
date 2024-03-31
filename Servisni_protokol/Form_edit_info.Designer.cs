@@ -104,6 +104,8 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoValidate = AutoValidate.EnableAllowFocusChange;
+            CancelButton = btn_cancel;
             ClientSize = new Size(359, 126);
             Controls.Add(dtp_meaDate);
             Controls.Add(btn_cancel);
