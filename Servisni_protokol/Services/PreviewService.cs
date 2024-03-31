@@ -47,14 +47,14 @@ public class PreviewService
 
         //Boxes
         int aa = 0;
-        aa = DrawBoxData(x,y, 
+        aa = DrawBoxData(x,y, 30,
             "Zákazník", 
             $"Název: {Sp.Customer.Name}",
             $"Adresa: {Sp.Customer.Address}",
             $"PSČ: {Sp.Customer.Psc}",
             $"IČ: {Sp.Customer.Ic}"
         );
-        DrawBoxData(Width/2 - x+2, y,
+        DrawBoxData(Width/2 , y, 15,
             "Zařízení",
             $"Výrobce: {Sp.Device.Manufacturer}",
             $"Model: {Sp.Device.Model}",
@@ -77,7 +77,7 @@ public class PreviewService
         y += DrawH1(x, y, $"Zařízení {valid} schopné dalšího provozu", 15);
     }
 
-    private int DrawBoxData(int x, int y, string title, params string[] values)
+    private int DrawBoxData(int x, int y, int cut, string title,  params string[] values)
     {
         int X = x;
         int Y = y;
@@ -92,8 +92,8 @@ public class PreviewService
 
         Y += margin;
 
-        g.DrawRectangle(Pens.Black, x, y, X, Y);
-        return Y;
+        g.DrawRectangle(Pens.Black, x, y, (Width/2)-cut, Y-y);
+        return Y - y;
     }
 
     private int DrawItem(int x, int y, string start, string mid, string end, bool bold = false, int size = 12)
